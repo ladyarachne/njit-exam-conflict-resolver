@@ -10,7 +10,6 @@ export default function App() {
   const [exams, setExams] = useState([emptyExam(), emptyExam(), emptyExam()]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
-  const [dateWarning, setDateWarning] = useState('');
 
   function updateExam(idx, field, value) {
     setExams((prev) =>
@@ -18,13 +17,11 @@ export default function App() {
     );
     setResult(null);
     setError('');
-    setDateWarning('');
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    setDateWarning('');
     setResult(null);
 
     // Basic field validation
@@ -42,20 +39,20 @@ export default function App() {
       }
       if (!/^[A-Za-z]{1,6}$/.test(prefix.trim())) {
         setError(
-          `Course prefix for ${LABELS[i]} should be letters only (e.g. CS, EE).`
+          `Subject code for ${LABELS[i]} should be letters only (e.g. CS, EE).`
         );
         return;
       }
     }
 
-    // Same-date check
+    // Same-date check – hard block
     const dates = exams.map((e) => e.date);
     const allSame = dates.every((d) => d === dates[0]);
     if (!allSame) {
-      setDateWarning(
-        'Warning: Not all exams are on the same date. The conflict resolver is designed for same-day exams. ' +
-          'Results below are based on the courses entered, but please confirm the dates are correct.'
+      setError(
+        'All three exams must be scheduled on the same calendar day to use this conflict resolver.'
       );
+      return;
     }
 
     try {
@@ -69,7 +66,6 @@ export default function App() {
     setExams([emptyExam(), emptyExam(), emptyExam()]);
     setResult(null);
     setError('');
-    setDateWarning('');
   }
 
   function courseLabel(exam) {
@@ -170,12 +166,6 @@ export default function App() {
           {error && (
             <div className="error-banner" role="alert">
               ⚠️ {error}
-            </div>
-          )}
-
-          {dateWarning && (
-            <div className="warning-banner" role="alert">
-              ⚠️ {dateWarning}
             </div>
           )}
 
