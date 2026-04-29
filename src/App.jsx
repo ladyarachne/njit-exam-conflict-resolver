@@ -117,6 +117,15 @@ export default function App() {
 
       <main className="main">
         <form onSubmit={handleSubmit} noValidate>
+          <div className="policy-note">
+            <span className="policy-note__icon">📜</span>
+            <p>
+              <strong>NJIT Policy:</strong> In the event that three exams are
+              scheduled on the same day or that two exams are scheduled for the
+              same hour of the same day, the following rules shall be used to
+              resolve such conflicts.
+            </p>
+          </div>
           <p className="form-instructions">
             Enter two or more final exams scheduled on the same calendar day.
             This tool will apply NJIT's conflict resolution rules to rank your
