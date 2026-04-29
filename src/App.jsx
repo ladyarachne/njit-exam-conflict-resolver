@@ -123,7 +123,10 @@ export default function App() {
               <strong>NJIT Policy:</strong> In the event that three exams are
               scheduled on the same day or that two exams are scheduled for the
               same hour of the same day, the following rules shall be used to
-              resolve such conflicts.
+              resolve such conflicts. 
+              1. Exams with multiple sections sharing a common final take highest priority. 
+              2. Among exams in the same Rule-1 tier, higher course number wins. 
+              3. If course numbers tie, alphabetically earlier subject code wins.
             </p>
           </div>
           <p className="form-instructions">
