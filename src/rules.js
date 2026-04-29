@@ -5,7 +5,7 @@
  * Rule 2: Among exams in the same Rule-1 tier, higher course number wins.
  * Rule 3: If course numbers tie, alphabetically earlier subject code wins.
  *
- * Supports 3 or more exams. All exams except the lowest-ranked stay scheduled.
+ * Supports 2 or more exams. All exams except the lowest-ranked stay scheduled.
  */
 
 /**
@@ -20,8 +20,8 @@
  * }}
  */
 export function resolveConflict(exams) {
-  if (!exams || exams.length < 3) {
-    throw new Error('At least three exams are required.');
+  if (!exams || exams.length < 2) {
+    throw new Error('At least two exams are required.');
   }
 
   // Enrich with computed fields
@@ -170,8 +170,8 @@ function buildSummary(ranked) {
   });
 
   let base =
-    'Based on NJIT\'s conflict rules, the exams are ranked by multiple-section ' +
-    'common final status (Rule 1), course number (Rule 2)';
+    "Based on NJIT's conflict rules, the entered exams are ranked by " +
+    'multiple-section/common final status (Rule 1), course number (Rule 2)';
 
   if (needsRule3) {
     base += ', and alphabetically by subject code where course numbers are tied (Rule 3)';

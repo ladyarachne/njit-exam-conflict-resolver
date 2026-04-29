@@ -11,10 +11,10 @@ const ORDINALS = [
 const examLabel = (idx) =>
   `${ORDINALS[idx] ?? `#${idx + 1}`} Exam`;
 
-const MIN_EXAMS = 3;
+const MIN_EXAMS = 2;
 
 export default function App() {
-  const [exams, setExams] = useState([emptyExam(), emptyExam(), emptyExam()]);
+  const [exams, setExams] = useState([emptyExam(), emptyExam()]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
@@ -72,7 +72,7 @@ export default function App() {
     const allSame = dates.every((d) => d === dates[0]);
     if (!allSame) {
       setError(
-        'All exams must be scheduled on the same calendar day to use this conflict resolver.'
+        'All entered exams must be scheduled on the same calendar day to use this conflict resolver.'
       );
       return;
     }
@@ -86,7 +86,7 @@ export default function App() {
   }
 
   function handleReset() {
-    setExams([emptyExam(), emptyExam(), emptyExam()]);
+    setExams([emptyExam(), emptyExam()]);
     setResult(null);
     setError('');
   }
@@ -118,9 +118,9 @@ export default function App() {
       <main className="main">
         <form onSubmit={handleSubmit} noValidate>
           <p className="form-instructions">
-            Enter all final exams scheduled on the same calendar day. This tool
-            will apply NJIT's conflict resolution rules to rank your exams and
-            determine which one should be rescheduled.
+            Enter two or more final exams scheduled on the same calendar day.
+            This tool will apply NJIT's conflict resolution rules to rank your
+            exams and determine which one should be rescheduled.
           </p>
 
           <div className="exams-grid">
