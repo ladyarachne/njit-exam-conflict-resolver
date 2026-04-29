@@ -4,13 +4,21 @@ import './App.css';
 
 const emptyExam = () => ({ prefix: '', number: '', date: '', isCommon: false });
 
-const LABELS = ['First Exam', 'Second Exam', 'Third Exam'];
+const ORDINALS = [
+  'First', 'Second', 'Third', 'Fourth', 'Fifth',
+  'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth',
+];
+const examLabel = (idx) =>
+  `${ORDINALS[idx] ?? `#${idx + 1}`} Exam`;
+
+const MIN_EXAMS = 3;
 
 export default function App() {
   const [exams, setExams] = useState([emptyExam(), emptyExam(), emptyExam()]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
+  // ── Exam field helpers ──────────────────────────────────────────────
   function updateExam(idx, field, value) {
     setExams((prev) =>
       prev.map((exam, i) => (i === idx ? { ...exam, [field]: value } : exam))
@@ -19,42 +27,57 @@ export default function App() {
     setError('');
   }
 
+  function addExam() {
+    setExams((prev) => [...prev, emptyExam()]);
+    setResult(null);
+    setError('');
+  }
+
+  function removeExam(idx) {
+    if (exams.length <= MIN_EXAMS) return;
+    setExams((prev) => prev.filter((_, i) => i !== idx));
+    setResult(null);
+    setError('');
+  }
+
+  // ── Submit ──────────────────────────────────────────────────────────
   function handleSubmit(e) {
     e.preventDefault();
     setError('');
     setResult(null);
 
-    // Basic field validation
+    // 1. All fields present and valid format
     for (let i = 0; i < exams.length; i++) {
       const { prefix, number, date } = exams[i];
       if (!prefix.trim() || !number.trim() || !date) {
-        setError(`Please fill in all fields for ${LABELS[i]}.`);
+        setError(`Please fill in all fields for the ${examLabel(i)}.`);
         return;
       }
       if (!/^\d+$/.test(number.trim())) {
         setError(
-          `Course number for ${LABELS[i]} must be a positive integer (e.g. 631).`
+          `Course number for the ${examLabel(i)} must be a positive integer (e.g. 332).`
         );
         return;
       }
       if (!/^[A-Za-z]{1,6}$/.test(prefix.trim())) {
         setError(
-          `Subject code for ${LABELS[i]} should be letters only (e.g. CS, EE).`
+          `Subject code for the ${examLabel(i)} should be letters only (e.g. CS, MATH).`
         );
         return;
       }
     }
 
-    // Same-date check – hard block
-    const dates = exams.map((e) => e.date);
+    // 2. All dates must be the same calendar day — hard block
+    const dates = exams.map((ex) => ex.date);
     const allSame = dates.every((d) => d === dates[0]);
     if (!allSame) {
       setError(
-        'All three exams must be scheduled on the same calendar day to use this conflict resolver.'
+        'All exams must be scheduled on the same calendar day to use this conflict resolver.'
       );
       return;
     }
 
+    // 3. Run conflict resolution
     try {
       setResult(resolveConflict(exams));
     } catch (err) {
@@ -68,6 +91,7 @@ export default function App() {
     setError('');
   }
 
+  // ── Formatters ──────────────────────────────────────────────────────
   function courseLabel(exam) {
     return `${exam.prefix.toUpperCase()} ${exam.number}`;
   }
@@ -82,6 +106,7 @@ export default function App() {
     });
   }
 
+  // ── Render ──────────────────────────────────────────────────────────
   return (
     <div className="app">
       <header className="header">
@@ -93,17 +118,30 @@ export default function App() {
       <main className="main">
         <form onSubmit={handleSubmit} noValidate>
           <p className="form-instructions">
-            Enter three final exams scheduled on the same calendar day. This
-            tool will apply NJIT's conflict resolution rules to determine which
-            exam should be rescheduled.
+            Enter all final exams scheduled on the same calendar day. This tool
+            will apply NJIT's conflict resolution rules to rank your exams and
+            determine which one should be rescheduled.
           </p>
+
           <div className="exams-grid">
             {exams.map((exam, idx) => (
               <div key={idx} className="exam-card">
-                <h2 className="exam-card__title">
-                  <span className="exam-card__badge">{idx + 1}</span>
-                  {LABELS[idx]}
-                </h2>
+                <div className="exam-card__header">
+                  <h2 className="exam-card__title">
+                    <span className="exam-card__badge">{idx + 1}</span>
+                    {examLabel(idx)}
+                  </h2>
+                  {idx >= MIN_EXAMS && (
+                    <button
+                      type="button"
+                      className="btn-remove"
+                      onClick={() => removeExam(idx)}
+                      aria-label={`Remove ${examLabel(idx)}`}
+                    >
+                      ✕ Remove
+                    </button>
+                  )}
+                </div>
 
                 <div className="field-row">
                   <div className="field">
@@ -163,6 +201,13 @@ export default function App() {
             ))}
           </div>
 
+          {/* Add Another Exam */}
+          <div className="add-exam-row">
+            <button type="button" className="btn btn--add" onClick={addExam}>
+              + Add Another Exam
+            </button>
+          </div>
+
           {error && (
             <div className="error-banner" role="alert">
               ⚠️ {error}
@@ -194,7 +239,8 @@ export default function App() {
 
             <ol className="ranked-list">
               {result.rankedExams.map((exam) => {
-                const isReschedule = exam.rank === 3;
+                const isReschedule =
+                  exam._idx === result.shouldReschedule._idx;
                 return (
                   <li
                     key={exam._idx}
@@ -221,7 +267,9 @@ export default function App() {
                             isReschedule ? 'status--reschedule' : 'status--stay'
                           }`}
                         >
-                          {isReschedule ? '🔄 Reschedule' : '✅ Stays Scheduled'}
+                          {isReschedule
+                            ? '🔄 Reschedule'
+                            : '✅ Stays Scheduled'}
                         </span>
                       </div>
 

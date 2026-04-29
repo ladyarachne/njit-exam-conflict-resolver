@@ -136,6 +136,13 @@ body {
   gap: 1rem;
 }
 
+.exam-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .exam-card__title {
   display: flex;
   align-items: center;
@@ -145,6 +152,29 @@ body {
   color: var(--navy);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+/* Remove button (only on extra cards) */
+.btn-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--crimson);
+  background: var(--crimson-light);
+  border: 1px solid var(--crimson-border);
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.btn-remove:hover {
+  background: var(--crimson-border);
+  color: var(--crimson-hover);
 }
 
 .exam-card__badge {
@@ -228,6 +258,30 @@ body {
   flex-shrink: 0;
   accent-color: var(--navy);
   cursor: pointer;
+}
+
+/* ─── Add Another Exam row ──────────────────────────────────────────── */
+.add-exam-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.btn--add {
+  background: var(--navy-tint);
+  color: var(--navy);
+  border: 1.5px dashed var(--navy-border);
+  border-radius: 7px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+.btn--add:hover {
+  background: var(--navy-border);
+  border-color: var(--navy-light);
 }
 
 /* ─── Banners ───────────────────────────────────────────────────────── */
