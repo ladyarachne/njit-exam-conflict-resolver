@@ -1,16 +1,32 @@
-# React + Vite
+# NJIT Final Exam Conflict Resolver
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A client-side web application tool that applies NJIT final exam conflict resolution rules to help determine which exam should be rescheduled during qualifying exam conflicts 
+Currently, there are two cases:
+1. Three or more exams scheduled on the same day
+2. Two exams scheduled within the same hour
 
-Currently, two official plugins are available:
+## Live Application
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[You can view the live app here.](https://ladyarachne.github.io/njit-exam-conflict-resolver/)
 
-## React Compiler
+## Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This application was designed to help students easily determine which of their conflicting exams to reschedule.
+Users can:
+* Enter two or more final exams
+* Add/remove exam entries (must be 2 minimum)
+* Mark if a course has multiple sections (common final)
+* Automatically rank exams by policy precedence.
 
-## Expanding the ESLint configuration
+The application performs all logic client-side in the browser and does not collect or store user data. 
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Technology Stack
+
+* React
+* Vite
+* JavaScript
+* HTML/CSS
+* Github Pages
+
+## Disclaimer
+This tool is provided to guide students based on NJIT's final exam conflict policies. Students should confirm exam changes with their instructor or the Registrar. 
